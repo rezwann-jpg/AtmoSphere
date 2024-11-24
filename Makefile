@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++17 -Iinclude -Wall -Wextra -Werror
+CXXFLAGS = -std=c++17 -Iinclude -Wall -Wextra
 LDFLAGS = -Llib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 
 # Directories
