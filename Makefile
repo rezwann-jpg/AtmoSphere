@@ -49,4 +49,4 @@ $(TEST_APP): $(TEST_OBJ_FILES)
 
 # Clean up generated files
 clean:
-	rm -rf $(OBJ_FILES) $(TEST_OBJ_FILES) $(APP) $(TEST_APP) $(BIN_DIR) $(BUILD_TEST_DIR)
+	rm -rf $(OBJ_FILES) $(TEST_OBJ_FILES) $(APP) $(TEST_APP)

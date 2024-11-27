@@ -4,9 +4,9 @@
 // TODO better ui design
 
 Button::Button(const sf::Vector2f &pos, const sf::Vector2f &sz, const std::string &label, const std::function<void()> &callback) : UIElement(pos, sz), onClick(callback), isPressed(false) {
-    
     shape.setPosition(pos);
     shape.setSize(sz);
+    shape.setRadius(10);
     UpdateVisuals();
 
     font.loadFromFile("assets/DMSans-Regular.ttf");

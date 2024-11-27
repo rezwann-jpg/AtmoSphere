@@ -7,7 +7,7 @@ SearchBar::SearchBar(const sf::Vector2f &pos, const sf::Vector2f &sz, const std:
     
     shape.setPosition(pos);
     shape.setSize(sz);
-    shape.setFillColor(sf::Color::White);
+    shape.setFillColor(sf::Color(50, 50, 200, 100));
     shape.setOutlineThickness(2);
     shape.setOutlineColor(sf::Color::Blue);
 
