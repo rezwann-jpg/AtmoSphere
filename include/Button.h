@@ -4,6 +4,7 @@
 #pragma once
 
 #include "UIElement.h"
+#include "RoundedRectangle.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <functional>
@@ -21,7 +22,7 @@ public:
     bool HandleEvent(const sf::Event& e) override;
 
 private:
-    sf::RectangleShape shape;
+    RoundedRectangle shape;
     sf::Text text;
     sf::Font font;
     std::function<void()> onClick;

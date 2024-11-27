@@ -1,12 +1,13 @@
 #include "Button.h"
 #include "SearchBar.h"
+#include "RoundedRectangle.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
 #include <string>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Demo");
+    sf::RenderWindow window(sf::VideoMode(736, 1000), "Demo");
 
     std::string currCity;
     std::vector<std::string> savedCities;
@@ -44,11 +45,31 @@ int main() {
         }
     );
 
+    RoundedRectangle rect(
+        sf::Vector2f(150, 40),
+        20
+    );
+    rect.setPosition(sf::Vector2f(270, 110));
+    rect.setFillColor(sf::Color::Green);
+    // rect.setOutlineColor(sf::Color::Black);
+    // rect.setOutlineThickness(2);
+
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("assets/download.jpg")) {
+        throw std::runtime_error("Failed to load image");
+    }
+
+    sf::Sprite backgroundSprite(backgroundTexture);
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
+            }
+            else if (event.type == sf::Event::MouseButtonPressed) {
+                bool pressed = rect.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+                std::cout << (pressed ? "Pressed\n" : "");
             }
 
             search.HandleEvent(event);
@@ -63,10 +84,12 @@ int main() {
         save.Update(mousePosF);
         showSave.Update(mousePosF);
         
-        window.clear(sf::Color(240, 240, 240));
+        window.clear();
+        window.draw(backgroundSprite);
         search.Draw(window);
         save.Draw(window);
         showSave.Draw(window);
+        window.draw(rect);
         window.display();
     }
 
