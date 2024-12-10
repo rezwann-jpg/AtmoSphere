@@ -4,8 +4,12 @@
 #pragma once
 
 #include "UIElement.h"
+#include "Trie.h"
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include <string>
+#include <iostream>
+#include <fstream>
 #include <functional>
 
 class SearchBar : public UIElement {
@@ -27,6 +31,16 @@ private:
     bool isFocused;
     std::function<void(const std::string&)> onSubmit;
 
+    Trie trie;
+    std::vector<std::string> suggestions;
+    int selectedSuggestion;
+
+    sf::RectangleShape suggestionBox;
+    std::vector<sf::Text> suggestionTexts;
+
+    void LoadCitiesOntoTrie();
+    void UpdateSuggestions();
+    void UpdateSuggestionHighlight();
 };
 
 #endif
