@@ -86,10 +86,10 @@ int main() {
         
         window.clear();
         window.draw(backgroundSprite);
-        search.Draw(window);
         save.Draw(window);
         showSave.Draw(window);
         window.draw(rect);
+        search.Draw(window);
         window.display();
     }
 
