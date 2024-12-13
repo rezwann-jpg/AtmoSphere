@@ -1,6 +1,7 @@
 #include "Button.h"
 #include "SearchBar.h"
 #include "RoundedRectangle.h"
+#include "TimeDateWidget.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
@@ -11,6 +12,11 @@ int main() {
 
     std::string currCity;
     std::vector<std::string> savedCities;
+
+    TimeDateWidget timeWidget(
+        sf::Vector2f(50, 500),
+        sf::Vector2f(200, 50)
+    );
     
     SearchBar search(
         sf::Vector2f(50, 50),
@@ -75,6 +81,7 @@ int main() {
             search.HandleEvent(event);
             save.HandleEvent(event);
             showSave.HandleEvent(event);
+            timeWidget.HandleEvent(event);
         }
 
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -83,6 +90,7 @@ int main() {
         search.Update(mousePosF);
         save.Update(mousePosF);
         showSave.Update(mousePosF);
+        timeWidget.Update(mousePosF);
         
         window.clear();
         window.draw(backgroundSprite);
@@ -90,6 +98,7 @@ int main() {
         showSave.Draw(window);
         window.draw(rect);
         search.Draw(window);
+        timeWidget.Draw(window);
         window.display();
     }
 
