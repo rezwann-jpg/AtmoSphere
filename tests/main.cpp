@@ -2,6 +2,8 @@
 #include "SearchBar.h"
 #include "RoundedRectangle.h"
 #include "TimeDateWidget.h"
+#include "WeatherFetcher.h"
+#include "BaseFetcher.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
@@ -9,6 +11,8 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(736, 1000), "Demo");
+
+    BaseFetcher *fetcher = new WeatherFetcher("99cf5d3f3e51411bb01ed89e384a01a4");
 
     std::string currCity;
     std::vector<std::string> savedCities;
@@ -21,8 +25,9 @@ int main() {
     SearchBar search(
         sf::Vector2f(50, 50),
         sf::Vector2f(300, 40),
-        [&currCity](const std::string& city) {
+        [&currCity, fetcher](const std::string& city) {
             std::cout << "Searching for " << city << std::endl;
+            std::cout << fetcher->fetchData(city) << std::endl;
             currCity = city;
         }
     );
