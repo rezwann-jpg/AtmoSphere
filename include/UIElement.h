@@ -15,8 +15,8 @@ public:
     virtual void Update(const sf::Vector2f& mousePos) = 0;
     virtual bool HandleEvent(const sf::Event& e) = 0;
 
-    void setPosition(const sf::Vector2f& pos);
-    void setSize(const sf::Vector2f& sz);
+    virtual void setPosition(const sf::Vector2f& pos);
+    virtual void setSize(const sf::Vector2f& sz);
     sf::Vector2f getPosition() const;
     sf::Vector2f getSize() const;
 
