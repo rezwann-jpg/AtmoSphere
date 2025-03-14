@@ -20,7 +20,7 @@ private:
         std::string m_city;
         std::string m_apiKey;
         std::string m_mode = "json";
-        std::string m_units = "metric";
+        std::string m_units = "standerd";
 
         std::string toUri() const;
         std::string buildWeatherUri(const std::string& city) const;

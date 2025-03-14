@@ -9,10 +9,14 @@ bool Icon::loadFromFile(const std::string &filePath) {
         std::cerr << "Failed to load icon from: " << filePath << std::endl;
         return false; 
     }
-    sprite.setTexture(texture);
+    sprite.setTexture(texture, true);
     return true;
 }
 
-sf::Sprite Icon::getSprite() const {
+sf::Texture& Icon::getTexture() {
+    return texture;
+}
+
+sf::Sprite& Icon::getSprite() {
     return sprite;
 }

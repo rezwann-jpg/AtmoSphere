@@ -4,28 +4,39 @@ IconManager::IconManager() {}
 IconManager::~IconManager() {}
 
 bool IconManager::load() {
-    return iconSet.addIcon("Clear", "icons/clear.png") &&
-               iconSet.addIcon("Clouds", "icons/clouds.png") &&
-               iconSet.addIcon("Rain", "icons/rain.png") &&
-               iconSet.addIcon("Snow", "icons/snow.png") &&
-               iconSet.addIcon("Thunderstorm", "icons/thunderstorm.png") &&
-               iconSet.addIcon("Drizzle", "icons/drizzle.png") &&
-               iconSet.addIcon("Mist", "icons/mist.png") &&
-               iconSet.addIcon("Smoke", "icons/smoke.png") &&
-               iconSet.addIcon("Haze", "icons/haze.png") &&
-               iconSet.addIcon("Dust", "icons/dust.png") &&
-               iconSet.addIcon("Fog", "icons/fog.png") &&
-               iconSet.addIcon("Sand", "icons/sand.png") &&
-               iconSet.addIcon("Ash", "icons/ash.png") &&
-               iconSet.addIcon("Squall", "icons/squall.png") &&
-               iconSet.addIcon("Tornado", "icons/tornado.png");
+    if (isLoaded) return true;
+
+    bool success = iconSet.addIcon("Clear", "assets/clear.png") &&
+               iconSet.addIcon("Clouds", "assets/clouds.png") &&
+               iconSet.addIcon("Rain", "assets/rain.png") &&
+               iconSet.addIcon("Snow", "assets/snow.png") &&
+               iconSet.addIcon("Thunderstorm", "assets/thunderstorm.png") &&
+               iconSet.addIcon("Drizzle", "assets/drizzle.png") &&
+               iconSet.addIcon("Mist", "assets/mist.png") &&
+               iconSet.addIcon("Smoke", "assets/smoke.png") &&
+               iconSet.addIcon("Haze", "assets/haze.png") &&
+               iconSet.addIcon("Dust", "assets/dusty.png") &&
+               iconSet.addIcon("Fog", "assets/fog.png") &&
+               iconSet.addIcon("Sand", "assets/sand.png") &&
+               iconSet.addIcon("Ash", "assets/ash.png") &&
+               iconSet.addIcon("Squall", "assets/squall.png") &&
+               iconSet.addIcon("Tornado", "assets/tornado.png") &&
+               iconSet.addIcon("Sunrise", "assets/sunrise.png") &&
+               iconSet.addIcon("Sunset", "assets/sunset.png");
+
+    isLoaded = success;
+    return success;
 }
 
 void IconManager::cleanUp() {
     iconSet.clear();
+    isLoaded = false;
 }
 
-sf::Sprite IconManager::getIcon(const std::string& weatherCondition) const {
+sf::Sprite& IconManager::getIcon(const std::string& weatherCondition) {
+    if (!isLoaded) {
+        load();
+    }
     return iconSet.getIcon(weatherCondition);
 }
 

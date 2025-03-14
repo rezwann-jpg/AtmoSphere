@@ -5,6 +5,7 @@
 
 #include "UIElement.h"
 #include "Trie.h"
+#include "RoundedRectangle.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
@@ -25,8 +26,12 @@ public:
 
 private:
     sf::RectangleShape shape;
+    RoundedRectangle roundedShape;
     sf::Text text;
     sf::Font font;
+    sf::Text placeholder;
+    sf::Clock clock;
+
     std::string input;
     bool isFocused;
     std::function<void(const std::string&)> onSubmit;
@@ -36,11 +41,13 @@ private:
     int selectedSuggestion;
 
     sf::RectangleShape suggestionBox;
+    RoundedRectangle roundedSuggestionBox;
     std::vector<sf::Text> suggestionTexts;
 
     void LoadCitiesOntoTrie();
     void UpdateSuggestions();
     void UpdateSuggestionHighlight();
+    void ClearSuggestions();
 };
 
 #endif

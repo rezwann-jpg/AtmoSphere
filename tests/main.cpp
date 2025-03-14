@@ -1,77 +1,69 @@
-#include <SFML/Graphics.hpp>
+#include "App.h"
+
+int main() {
+    App app("AtmoSphere", 1280, 720);
+
+    while (app.Running()) {
+        app.HandleEvents();
+        app.Update();
+        app.Draw();
+    }
+
+    return 0;
+}
+
+/*#include <SFML/Graphics.hpp>
 #include "cityWeather.h"
 #include "cityManager.h"
 #include "weatherDashboard.h"
+#include "WeatherService.h"
+#include "IconManager.h"
+#include "TimeDateWidget.h"
 #include <iostream>
 
-DetailedWeather createSampleWeather(double temp, double wind, int humidity, time_t sunrise, time_t sunset) {
-    DetailedWeather weather;
-    weather.setTemperature(temp);
-    weather.setWindSpeed(wind);
-    weather.setHumidity(humidity);
-    weather.setSunrise(sunrise);
-    weather.setSunset(sunset);
-    weather.setWeatherMain("Clear");
-    weather.setWeatherDescription("Clear sky");
-    return weather;
-}
-
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Weather Dashboard Demo");
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Weather Dashboard Demo");
 
     std::string currCity;
     std::vector<std::string> savedCities;
 
+    WeatherService ws("99cf5d3f3e51411bb01ed89e384a01a4");
+    CityManager cityManager;
+
+    if (!TheIconManager::getInstance().load()) {
+        std::cerr << "Failed to load icons" << std::endl;
+    }
+
     SearchBar search(
-        sf::Vector2f(20, 20),
+        sf::Vector2f(100, 20),
         sf::Vector2f(300, 40),
-        [&currCity](const std::string& city) {
+        [&currCity, &cityManager, &ws](const std::string& city) {
             std::cout << "Searching for " << city << std::endl;
+            auto cityW = std::make_unique<CityWeather>();
+            *cityW = ws.getWeatherForCity(city);
+            std::cout << cityW->getWeather().getWeatherMain() << "\n";
+            cityManager.addCity(std::move(cityW));
             currCity = city;
         }
     );
 
-    Button save(
-        sf::Vector2f(370, 20),
-        sf::Vector2f(150, 40),
-        "Save City",
-        [&currCity, &savedCities]() {
-            if (!currCity.empty()) {
-                savedCities.push_back(currCity);
-                std::cout << "Saved" << currCity << "\n";
-            }
-        }
+    TimeDateWidget tdw(
+        sf::Vector2f(600, 20),
+        sf::Vector2f(200, 50)
     );
-    
-    CityManager cityManager;
-    
-    auto london = std::make_unique<CityWeather>();
-    london->setCityName("London");
-    london->setCountryCode("UK");
-    london->setLatitude(51.5074);
-    london->setLongitude(-0.1278);
-    london->updateWeather(createSampleWeather(291.5, 4.2, 65, 1653456789, 1653496789));
-    
-    auto newYork = std::make_unique<CityWeather>();
-    newYork->setCityName("New York");
-    newYork->setCountryCode("US");
-    newYork->setLatitude(40.7128);
-    newYork->setLongitude(-74.0060);
-    newYork->updateWeather(createSampleWeather(295.1, 5.8, 58, 1653456789, 1653496789));
-    
-    auto tokyo = std::make_unique<CityWeather>();
-    tokyo->setCityName("Tokyo");
-    tokyo->setCountryCode("JP");
-    tokyo->setLatitude(35.6762);
-    tokyo->setLongitude(139.6503);
-    tokyo->updateWeather(createSampleWeather(298.3, 3.1, 72, 1653456789, 1653496789));
-
-    cityManager.addCity(std::move(london));
-    cityManager.addCity(std::move(newYork));
-    cityManager.addCity(std::move(tokyo));
 
     try {
         WeatherDashboard dashboard(sf::Vector2f(20, 80), cityManager, window);
+
+        Button refresh(
+            sf::Vector2f(470, 20),
+            sf::Vector2f(150, 40),
+            "Refresh",
+            [&dashboard]() {
+                dashboard.updateWeather();
+                std::cout << "Refreshed all data\n";
+            }
+        );
         
         while(window.isOpen()) {
             sf::Event event;
@@ -88,20 +80,24 @@ int main() {
                 }
 
                 search.HandleEvent(event);
-                save.HandleEvent(event);
+                refresh.HandleEvent(event);
+                dashboard.handleEvents(event);
+                tdw.HandleEvent(event);
             }
 
             sf::Vector2i mousePos = sf::Mouse::getPosition(window);
             sf::Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
             search.Update(mousePosF);
-            save.Update(mousePosF);
-            dashboard.Update();
+            refresh.Update(mousePosF);
+            dashboard.Update(mousePosF);
+            tdw.Update(mousePosF);
 
             window.clear(sf::Color::White);
             dashboard.drawAll();
             search.Draw(window);
-            save.Draw(window);
+            refresh.Draw(window);
+            tdw.Draw(window);
             window.display();
         }
     }
@@ -110,9 +106,11 @@ int main() {
         return 1;
     }
 
+    TheIconManager::getInstance().cleanUp();
+
     return 0;
 }
-
+*/
 /*
 #include "Button.h"
 #include "SearchBar.h"

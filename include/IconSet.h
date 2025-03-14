@@ -13,11 +13,11 @@ public:
     ~IconSet();
 
     bool addIcon(const std::string& weatherCondition, const std::string& filePath);
-    sf::Sprite getIcon(const std::string& weatherCondition) const;
+    sf::Sprite& getIcon(const std::string& weatherCondition);
     void clear();
 
 private:
-    std::unordered_map<std::string, Icon> icons;
+    std::unordered_map<std::string, Icon*> icons;
 
 };
 
