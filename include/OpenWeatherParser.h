@@ -2,7 +2,7 @@
 #define OPENWEATHERPARSER_H
 
 #include <string>
-#include "json.hpp"
+#include <nlohmann/json.hpp>
 #include "cityWeather.h"
 #include "IWeatherParser.h"
 
@@ -14,7 +14,6 @@ private:
     void parseCityData(const nlohmann::json& jsonObj, CityWeather& output);
     void parseWeatherData(const nlohmann::json& jsonObj, DetailedWeather& weather);
     void parseTemperature(const nlohmann::json& jsonObj, DetailedWeather& weather);
-    void parseAirQuality(const nlohmann::json& jsonObj, DetailedWeather& weather);
     void logError(const std::string& message) const;
 };
 

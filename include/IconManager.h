@@ -11,7 +11,7 @@ public:
 
     bool load();
     void cleanUp();
-    sf::Sprite getIcon(const std::string& weatherCondition) const;
+    sf::Sprite& getIcon(const std::string& weatherCondition);
 
     static IconManager& getInstance();
 
@@ -22,6 +22,9 @@ private:
     IconSet iconSet;
     IconManager();
 
+    bool isLoaded;
 };
+
+typedef IconManager TheIconManager;
 
 #endif

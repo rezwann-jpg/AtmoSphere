@@ -11,7 +11,8 @@ public:
     ~Icon();
 
     bool loadFromFile(const std::string& filePath);
-    sf::Sprite getSprite() const;
+    sf::Sprite& getSprite();
+    sf::Texture& getTexture();
 
 private:
     sf::Texture texture;

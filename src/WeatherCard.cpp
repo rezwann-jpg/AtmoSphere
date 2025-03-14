@@ -1,6 +1,8 @@
 #include "WeatherCard.h"
+#include "IconManager.h"
 #include <cmath>
 #include <sstream>
+#include <iostream>
 
 WeatherCard::WeatherCard(const sf::Vector2f &pos, const sf::Vector2f &sz, CityWeather *city, const sf::Font &font, std::function<void(CityWeather *)> clickHandler) 
     : cityData(city), onClick(clickHandler), UIElement(pos, sz) {
@@ -34,22 +36,21 @@ void WeatherCard::updateDisplay() {
 
     cityNameText.setString(cityData->getCityName());
     std::stringstream tempSS;
-    tempSS.precision(2);
-    tempSS << cityData->getWeather().getTemperature() << "\u00B0C";
-    tempText.setString(tempSS.str());
+    tempSS.precision(0);
+    tempSS << std::fixed << cityData->getWeather().getTemperature();
+    std::string tempStr = tempSS.str() + "\xC2\xB0" + "C";
+    tempText.setString(sf::String::fromUtf8(tempStr.begin(), tempStr.end()));
     mainText.setString(cityData->getWeather().getWeatherMain());
     std::stringstream windSS;
-    windSS.precision(2);
-    windSS << "Wind: " << cityData->getWeather().getWindSpeed() << " m/s";
+    windSS.precision(1);
+    windSS << "Wind: " << std::fixed << cityData->getWeather().getWindSpeed() << " m/s";
     windText.setString(windSS.str());
-
 }
 
 bool WeatherCard::HandleEvent(const sf::Event &e) {
     if(e.type == sf::Event::MouseButtonPressed) {
-        sf::Vector2f mousePos(e.mouseButton.x, e.mouseButton.y);
-        if(background.getGlobalBounds().contains(mousePos)) {
-            if(onClick) onClick(cityData);
+        if (isHovered) {
+            if (onClick) onClick(cityData);
             return true;
         }
     }
@@ -57,6 +58,16 @@ bool WeatherCard::HandleEvent(const sf::Event &e) {
 }
 
 void WeatherCard::Update(const sf::Vector2f &mousePos) {
+    isHovered = background.getGlobalBounds().contains(mousePos);
+    
+    if (isHovered) {
+        background.setFillColor(sf::Color(220, 230, 255));
+        cityNameText.setFillColor(sf::Color(0, 0, 100));
+    } else {
+        background.setFillColor(sf::Color(234, 242, 255));
+        cityNameText.setFillColor(sf::Color(30, 30, 30));
+    }
+
     updateDisplay();
 }
 
@@ -92,7 +103,7 @@ void WeatherCard::updateChildPositions() {
     cityNameText.setFillColor(sf::Color(30, 30, 30));
     centerText(cityNameText, 0.2f);
 
-    tempText.setCharacterSize(18);
+    tempText.setCharacterSize(24);
     tempText.setStyle(sf::Text::Bold);
     tempText.setFillColor(sf::Color(10, 50, 150));
     centerText(tempText, 0.4f);
@@ -105,10 +116,11 @@ void WeatherCard::updateChildPositions() {
     windText.setFillColor(sf::Color(80, 80, 80));
     centerText(windText, 0.7f);
 
-    iconPlaceholder.setSize({40, 40});
+    std::string weatherKey = cityData->getWeather().getWeatherMain();
+    iconPlaceholder = TheIconManager::getInstance().getIcon(weatherKey);
+
     iconPlaceholder.setPosition(
-        position.x + size.x - 50,
-        position.y + 10
+        position.x + size.x - 70,
+        position.y + 20
     );
-    iconPlaceholder.setFillColor(sf::Color(200, 230, 255));
 }

@@ -3,7 +3,7 @@
 
 #include "cityWeather.h"
 #include <string>
-#include "json.hpp"
+#include <nlohmann/json.hpp>
 
 class IWeatherParser {
 public:

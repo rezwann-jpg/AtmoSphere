@@ -26,6 +26,8 @@ public:
     size_t getCityCount() const;
     void setMaxCacheSize(size_t size);
 
+    void updateWeatherForAllCities();
+
     void addObserver(std::function<void()> callback);
     void notifyObservers();
 };

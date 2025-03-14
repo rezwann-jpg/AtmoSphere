@@ -29,7 +29,7 @@ private:
     sf::Text tempText;
     sf::Text mainText;
     sf::Text windText;
-    sf::RectangleShape iconPlaceholder;
+    sf::Sprite iconPlaceholder;
     
     std::function<void(CityWeather*)> onClick;
     

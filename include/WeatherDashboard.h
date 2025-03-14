@@ -21,8 +21,11 @@ public:
     void showDetailedView(CityWeather* city);
     void drawAll();
     void handleResize();
+    void handleEvents(const sf::Event& event);
 
-    void Update();
+    void updateWeather();
+
+    void Update(const sf::Vector2f &mousePos);
 
 private:
 
@@ -33,9 +36,11 @@ private:
     sf::Vector2f gridMargin;
     float columnSpacing = 25.f;
     float rowSpacing = 25.f;
-    sf::Vector2f cardBaseSize {220, 160};
+    sf::Vector2f cardBaseSize {260, 190};
     int columns = 3;
 
 };
+
+std::string windDirectionToString(int degree);
 
 #endif
