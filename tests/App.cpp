@@ -18,12 +18,16 @@ App::App(const std::string &title, int width, int height)
         auto cityW = std::make_unique<CityWeather>();
         *cityW = service.getWeatherForCity(city);
         std::cout << cityW->getWeather().getWeatherMain() << "\n";
+        cityW->addObserver(fileObserver);
         cityManager.addCity(std::move(cityW));
     }));
     elements.push_back(new Button(sf::Vector2f(650, 20), sf::Vector2f(150, 40), "Refresh", [this](){
         dashboard.updateWeather();
         std::cout << "Refreshed all data\n";
     }));
+
+    setDataFileName();
+    loadSavedWeatherData();
 }
 
 App::~App() {
@@ -78,4 +82,18 @@ void App::Draw() {
     }
 
     window.display();
+}
+
+void App::setDataFileName() {
+    fileObserver = std::make_shared<FileWeatherObserver>(dataFileName);
+}
+
+void App::loadSavedWeatherData() {
+    if (!fileObserver) {
+        fileObserver = std::make_unique<FileWeatherObserver>(dataFileName);
+    }
+    
+    auto loadedData = fileObserver->loadWeatherData();
+    
+    cityManager.loadCities(loadedData);
 }

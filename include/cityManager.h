@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 #include <unordered_map>
 #include <memory>
 #include <functional>
@@ -27,6 +28,7 @@ public:
     void setMaxCacheSize(size_t size);
 
     void updateWeatherForAllCities();
+    void loadCities(vector<pair<string, DetailedWeather>>& data);
 
     void addObserver(std::function<void()> callback);
     void notifyObservers();

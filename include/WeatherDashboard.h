@@ -24,11 +24,12 @@ public:
     void handleEvents(const sf::Event& event);
 
     void updateWeather();
-
+    
     void Update(const sf::Vector2f &mousePos);
-
+    
 private:
-
+    void deleteCity(CityWeather* city);
+    
     CityManager& cityManager;
     sf::RenderWindow& window;
     sf::Font font;

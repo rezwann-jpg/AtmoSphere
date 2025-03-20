@@ -10,7 +10,7 @@
 
 class WeatherCard : public UIElement {
 public:
-    WeatherCard(const sf::Vector2f &pos, const sf::Vector2f &sz, CityWeather* city, const sf::Font& font, std::function<void(CityWeather*)>clickHandler);
+    WeatherCard(const sf::Vector2f &pos, const sf::Vector2f &sz, CityWeather* city, const sf::Font& font, std::function<void(CityWeather*)>clickHandler, std::function<void(CityWeather*)> deleteHandle);
     ~WeatherCard();
 
     void setPosition(const sf::Vector2f& pos) override;
@@ -30,8 +30,14 @@ private:
     sf::Text mainText;
     sf::Text windText;
     sf::Sprite iconPlaceholder;
+
+    sf::CircleShape deleteButton;
+    sf::Text deleteButtonText;
+
+    bool isDeleteHovered;
     
     std::function<void(CityWeather*)> onClick;
+    std::function<void(CityWeather*)> onDelete;
     
     void updateDisplay();
     void updateChildPositions();

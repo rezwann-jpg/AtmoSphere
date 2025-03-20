@@ -9,6 +9,7 @@
 #include "cityManager.h"
 #include "UIElement.h"
 #include "WeatherDashboard.h"
+#include "fileWeatherObserver.h"
 
 class App {
 public:
@@ -26,6 +27,12 @@ private:
     CityManager cityManager;
     std::vector<UIElement*> elements;
     WeatherDashboard dashboard;
+
+    std::string dataFileName = "weather_data.txt";
+    std::shared_ptr<FileWeatherObserver> fileObserver;
+    
+    void setDataFileName();
+    void loadSavedWeatherData();
 };
 
 #endif
