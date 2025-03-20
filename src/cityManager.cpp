@@ -9,6 +9,9 @@ void CityManager::addCity(std::unique_ptr<CityWeather> city) {
     }
     std::string cityName = city->getCityName();
     cities[cityName] = std::move(city);
+    for (const auto& it : cities) {
+        it.second->notifyObservers();
+    }
     notifyObservers();
 }
 
@@ -66,4 +69,24 @@ void CityManager::notifyObservers() {
     for (auto& observer : observers) {
         observer();
     }
+}
+
+void CityManager::loadCities(vector<pair<string, DetailedWeather>>& data) {
+    for (const auto& cityIt : data) {
+        auto it = cities.find(cityIt.first);
+        if (it != cities.end()) {
+            it->second->updateWeather(cityIt.second);
+        } else {
+            auto newCity = std::make_unique<CityWeather>();
+            newCity->setCityName(cityIt.first);
+            newCity->updateWeather(cityIt.second);
+            
+            if (cities.size() >= maxCacheSize) {
+                cities.erase(cities.begin());
+            }
+            cities[cityIt.first] = std::move(newCity);
+        }
+    }
+
+    notifyObservers();
 }

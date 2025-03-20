@@ -54,13 +54,23 @@ void WeatherDashboard::refreshDashboard() {
             cardBaseSize,
             city,
             font,
-            [this](CityWeather* city) { showDetailedView(city); }
+            [this](CityWeather* city) { showDetailedView(city); },
+            [this](CityWeather* city) { deleteCity(city); }
         );
         newCards.push_back(std::move(card));
     }
     cards = std::move(newCards);
 
     handleResize();
+}
+
+void WeatherDashboard::deleteCity(CityWeather *city) {
+    if (!city)
+        return;
+
+    cityManager.removeCity(city->getCityName());
+
+    refreshDashboard();
 }
 
 void WeatherDashboard::arrangeGrid() {
