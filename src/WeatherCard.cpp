@@ -4,8 +4,8 @@
 #include <sstream>
 #include <iostream>
 
-WeatherCard::WeatherCard(const sf::Vector2f &pos, const sf::Vector2f &sz, CityWeather *city, const sf::Font &font, std::function<void(CityWeather *)> clickHandler) 
-    : cityData(city), onClick(clickHandler), UIElement(pos, sz) {
+WeatherCard::WeatherCard(const sf::Vector2f &pos, const sf::Vector2f &sz, CityWeather *city, const sf::Font &font, std::function<void(CityWeather *)> clickHandler, std::function<void(CityWeather*)> deleteHandle) 
+    : cityData(city), onClick(clickHandler), onDelete(deleteHandle), UIElement(pos, sz) {
     
     background.setFillColor(sf::Color(240, 240, 240));
 
@@ -13,6 +13,15 @@ WeatherCard::WeatherCard(const sf::Vector2f &pos, const sf::Vector2f &sz, CityWe
     tempText.setFont(font);
     mainText.setFont(font);
     windText.setFont(font);
+
+    deleteButton.setFillColor(sf::Color(200, 60, 60));
+    
+    deleteButtonText.setFont(font);
+    deleteButtonText.setString("x");
+    deleteButtonText.setFillColor(sf::Color::White);
+    deleteButtonText.setStyle(sf::Text::Bold);
+    
+    isDeleteHovered = false;
 
     updateChildPositions();
     updateDisplay();
@@ -49,7 +58,14 @@ void WeatherCard::updateDisplay() {
 
 bool WeatherCard::HandleEvent(const sf::Event &e) {
     if(e.type == sf::Event::MouseButtonPressed) {
-        if (isHovered) {
+        sf::Vector2f mousePos(e.mouseButton.x, e.mouseButton.y);
+
+        if (deleteButton.getGlobalBounds().contains(mousePos)) {
+            if (onDelete) onDelete(cityData);
+            return true;
+        }
+         
+        else if (background.getGlobalBounds().contains(mousePos)) {
             if (onClick) onClick(cityData);
             return true;
         }
@@ -60,6 +76,12 @@ bool WeatherCard::HandleEvent(const sf::Event &e) {
 void WeatherCard::Update(const sf::Vector2f &mousePos) {
     isHovered = background.getGlobalBounds().contains(mousePos);
     
+    if (isDeleteHovered) {
+        deleteButton.setFillColor(sf::Color(220, 40, 40));
+    } else {
+        deleteButton.setFillColor(sf::Color(200, 60, 60));
+    }
+
     if (isHovered) {
         background.setFillColor(sf::Color(220, 230, 255));
         cityNameText.setFillColor(sf::Color(0, 0, 100));
@@ -78,6 +100,8 @@ void WeatherCard::Draw(sf::RenderWindow &window) {
     window.draw(mainText);
     window.draw(windText);
     window.draw(iconPlaceholder);
+    window.draw(deleteButton);
+    window.draw(deleteButtonText);
 }
 
 sf::FloatRect WeatherCard::getGlobalBounds() const {
@@ -115,6 +139,24 @@ void WeatherCard::updateChildPositions() {
     windText.setCharacterSize(16);
     windText.setFillColor(sf::Color(80, 80, 80));
     centerText(windText, 0.7f);
+
+    float buttonRadius = 12.0f;
+    deleteButton.setRadius(buttonRadius);
+    deleteButton.setPosition(
+        position.x + 10, 
+        position.y + 10 
+    );
+    
+    deleteButtonText.setCharacterSize(18);
+    sf::FloatRect textBounds = deleteButtonText.getLocalBounds();
+    deleteButtonText.setOrigin(
+        textBounds.left + textBounds.width/2.0f,
+        textBounds.top + textBounds.height/2.0f
+    );
+    deleteButtonText.setPosition(
+        deleteButton.getPosition().x + buttonRadius,
+        deleteButton.getPosition().y + buttonRadius - 1
+    );
 
     std::string weatherKey = cityData->getWeather().getWeatherMain();
     iconPlaceholder = TheIconManager::getInstance().getIcon(weatherKey);
