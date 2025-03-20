@@ -4,6 +4,8 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <utility>
 #include "weatherObserver.h"
 #include "detailedWeather.h"
 
@@ -15,6 +17,8 @@ private:
 public:
     explicit FileWeatherObserver(const std::string& fileName);
     void onWeatherUpdate(const std::string& cityName, const DetailedWeather& weather) override;
+
+    vector<pair<string, DetailedWeather>> loadWeatherData();
 };
 
 #endif 
